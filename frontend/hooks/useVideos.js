@@ -35,13 +35,43 @@ const useVideos = (
     }
 
     // functionto call likeVideo from smart contract 
-    const likeVideo = async address => { 
-
+    const likeVideo = async (address) => { 
+        console.log('video Liked !')
+        const tx = await program.rpc.likeVideo({
+            accounts : {
+                video : new PublicKey(address),
+                authority : wallet.publicKey,
+                ...defaultAccounts,
+            },
+        })
+        console.log(tx)
     }
 
     //function to call getComment from smart contract 
     const createComment = async(address,count,comment) => { 
-
+        let [comment_pda] = await anchor.web3.PublicKey.findProgramAddress(
+            [utf8.encode('comment'),
+            new PublicKey(address).toBuffer(),
+            new BN(count).toArrayLike(Buffer,'be',8),
+        ],
+        program.programId,
+        )
+        if(userDetail){
+            const tx = await program.rpc.createComment(
+                comment,
+                userDetail.userName,
+                userDetail.userProfileImageUrl,
+                {
+                    accounts: {
+                        video : new PublicKey(address),
+                        comment : comment_pda,
+                        authority : wallet.publicKey,
+                        ...defaultAccounts,
+                    },
+                }
+            )
+            console.log(tx)
+        }
     }
 
     // Function to call create video from smart Contract 
@@ -76,7 +106,23 @@ const useVideos = (
     }
     //Function to fetch comments fron the commentAccount on the smart contract 
     const getComments = async(address,count) => {
-
+        let commentSigners = [];
+        for(let i=0;i<count;i++){
+            let [commenSigner] = await  anchor.web3.PublicKey.findProgramAddress(
+                [
+                    utf8.encode('comment'),
+                    new PublicKey(address).toBuffer(),
+                    new BN(i).toArrayLike(Buffer,'be',8)
+                ],
+                program.programId,
+            )
+            commentSigners.push(commenSigner)
+        }
+        const comments = await program.account.commentAccount.fetchMultiple(
+            commentSigners,
+        )
+        console.log(comments)
+        return comments;
     }
 
     return {getVideos,likeVideo,createComment,newVideo,getComments}

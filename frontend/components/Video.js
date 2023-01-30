@@ -1,7 +1,10 @@
 import React from 'react';
 import { useRef,useState } from 'react';
 import styles from '../styles/Video.module.css'
-import ReactPlayer from 'react-player'
+
+import Sidebar from '../components/Sidebar'
+import Comments from '../components/Comments'
+import Footer from '../components/Footer'
  const Video = ({
     address,
     url,
@@ -25,31 +28,35 @@ import ReactPlayer from 'react-player'
             videoRef.current.pause()
             setPlaying(false)
         }else{
-            // videoRef.current.play()
-            // setPlaying(true)
+            videoRef.current.load()
+            videoRef.current.play()
+            setPlaying(true)
             // videoRef.current.load()
             // fetchVideoAndPlay()
-            var playPromise = document.querySelector('video').play();
+            // var playPromise = document.querySelector('video').play();
 
-                // In browsers that don’t yet support this functionality,
-                // playPromise won’t be defined.
-                if (playPromise !== undefined) {
-                playPromise.then(function() {
-                    // Automatic playback started!
-                    videoRef.current.play()
-            setPlaying(true)
-                }).catch(function(error) {
-                    console.log("eeror cannot play video ")
-                    console.log(error)
-                });
-                }
+            //     // In browsers that don’t yet support this functionality,
+            //     // playPromise won’t be defined.
+            //     if (playPromise !== undefined) {
+            //     playPromise.then(function() {
+            //         // Automatic playback started!
+            //         videoRef.current.play()
+            //         setPlaying(true)
+            // setPlaying(true)
+            //     }).catch(function(error) {
+            //         console.log("eeror cannot play video ")
+            //         console.log(error)
+            //     });
+            //     }
             
         }
     }
     function fetchVideoAndPlay() {
+        console.log(fetch(videoRef.current.src,{mode:'no-cors'}))
         fetch(videoRef.current.src,{ mode: 'no-cors'})
         .then(response => response.blob())
         .then(blob => {
+            console.log(blob)
           videoRef.current.srcObject = blob;
           return videoRef.current.play();
         })
@@ -72,19 +79,39 @@ import ReactPlayer from 'react-player'
     return (
         <div className={styles.wrapper}>
             <video
-            id='video'
+            
             className={styles.videoPlayer}
             loop
             onClick = {onVideoPress}
             src={url}  ref = {videoRef}
-           
+            
             
             style = {{objectFit:'cover'}}
             />
-                
-            
+            <Footer
+                channel = {channel}
+                description = {description}
+                song = {index}
+            />
+            <Sidebar
+                address = {address}
+                likes = {likes}
+                shares = {shares}
+                onShowComments = {showComments}
+                likeVideo = {likeVideo}
+                index = {index}
+                likesAddress = {likesAddress}
+                messages = {commentCount}
+            />
             {showCommentsModal && (
-                <Comments/> 
+                <Comments
+                    onHide = {hideComments}
+                    index = { index}
+                    address = {address}
+                    createComment = {createComment}
+                    getComments = {getComments}
+                    commentCount = {commentCount}
+                /> 
             )}
         </div>
     )
