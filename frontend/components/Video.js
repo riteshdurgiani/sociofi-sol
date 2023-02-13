@@ -18,6 +18,8 @@ import Footer from '../components/Footer'
     createComment,
     getComments,
     commentCount,
+    connection,
+    video
  }) => { 
     const [playing,setPlaying] = useState(false)
     const [showCommentsModal,setShowCommentsModal] = useState(false)
@@ -102,6 +104,8 @@ import Footer from '../components/Footer'
                 index = {index}
                 likesAddress = {likesAddress}
                 messages = {commentCount}
+                connection = {connection}
+                video = {video}
             />
             {showCommentsModal && (
                 <Comments

@@ -76,6 +76,14 @@ const useVideos = (
 
     // Function to call create video from smart Contract 
     const newVideo = async() => {
+        //steps to store in ipfs : 
+        //1. connect  to web3 storage and ipfs using keys and tokens 
+        //const storage = new Web3Storage({ token }) //usage of token 
+        //https://web3.storage/docs/#quickstart
+        //2. take the input of video as a file from the user  
+        //3. upload the video to ipfs and get the cid 
+        //4. create a url in the specified format attatching cid + file_name 
+        //5. supply this entire url to tht blockchain as video url 
         const randomKey = anchor.web3.Keypair.generate().publicKey;
 
         let [video_pda] = await anchor.web3.PublicKey.findProgramAddress(

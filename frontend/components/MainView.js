@@ -49,6 +49,7 @@ const MainView = () => {
   );
   useEffect(() => {
     if(wallet.connected){
+      console.log(wallet)
       checkAccount()
 
       console.log(videos)
@@ -108,6 +109,8 @@ const MainView = () => {
                         createComment = {createComment}
                         getComments = {getComments}
                         commentCount = {video.account.commentCount.toNumber()}
+                        connection = {connection}
+                        video = {video}
                         />
                       ))
                   )}
