@@ -10,7 +10,9 @@ import useAccount from '../hooks/useAccount'
 import useVideos from '../hooks/useVideos';
 import Video from '../components/Video'
 import UploadModal from '../components/UploadModal'
+
 import BottomBar from '../components/BottomBar'
+import LoadingSpinner from './LoadingSpinner';
 const anchor = require('@project-serum/anchor')
 const utf8 = anchor.utils.bytes.utf8
 const {BN,web3} = anchor
@@ -38,6 +40,7 @@ const MainView = () => {
   const [description,setDescription] = useState('');
   const [videoUrl,setVideoUrl] = useState('');
   const [userDetail,setUserDetail] = useState();
+  const [isLoading, setIsLoading] = useState(false);
   const {getVideos,likeVideo,createComment,newVideo,getComments} = useVideos(
     setVideos,
     userDetail,
@@ -79,6 +82,7 @@ const MainView = () => {
         <>
          {isAccount ? (
             <div>
+              {isLoading ? <LoadingSpinner /> : ""}
                 {newVideoShow && (
                   <UploadModal
                   description = {description}
@@ -87,6 +91,8 @@ const MainView = () => {
                   setDescription = {setDescription}
                   setVideoUrl = {setVideoUrl}
                   setNewVideoShow = {setNewVideoShow}
+                  isLoading = {isLoading}
+                  setIsLoading = {setIsLoading}
                   />
                 )}
                 <div className={styles.appVideos}>

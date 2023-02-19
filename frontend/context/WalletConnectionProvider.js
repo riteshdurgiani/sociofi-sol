@@ -10,6 +10,7 @@ const WalletConnectionProvider = ({children}) => {
     const wallets = useMemo(()=>[new PhantomWalletAdapter()],[])
 
     return(
+        
         <ConnectionProvider endpoint={endpoint}>
             <WalletProvider wallets={wallets}>
                 <WalletModalProvider>{children}</WalletModalProvider>

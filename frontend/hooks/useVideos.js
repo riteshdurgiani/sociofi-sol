@@ -31,6 +31,12 @@ const useVideos = (
     const getVideos = async () => { 
         const videos = await program.account.videoAccount.all();
         //save all videos in state for frontend 
+        // videos = videos.sort()
+        console.log("VIDEOOOO ")
+       console.log(new Date(videos[0].account.creatorTime))
+       videos.sort(function(a,b){
+        return b.account.creatorTime.words[0] - a.account.creatorTime.words[0]
+       })
         setVideos(videos)
     }
 

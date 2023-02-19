@@ -8,12 +8,15 @@ const UploadModal = ({
     setDescription,
     setVideoUrl,
     setNewVideoShow,
+    isLoading,
+    setIsLoading
 }) => { 
     function jsonFile(filename, obj) {
         return new File([JSON.stringify(obj)], filename)
       }
       const namePrefix = "VideoGallery"
     async function selectedFile(){
+        setIsLoading(true)
         const metadataFile = jsonFile('metadata.json', {
             path:  document.getElementById("fileob").files[0].filename
             
@@ -33,6 +36,7 @@ const UploadModal = ({
           const imageURI = `https://${cid}.ipfs.w3s.link/${encodeURIComponent(selectedFile.name)}`
           console.log(imageURI)
           setVideoUrl(imageURI)
+          setIsLoading(false)
         }
     return(
         <div className ={styles.wrapper}>
